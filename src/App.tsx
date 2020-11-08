@@ -1,26 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ConnectedRouter } from 'connected-react-router';
+import styled, { ThemeProvider } from 'styled-components';
+import { History } from 'history';
+import { Provider } from 'react-redux';
+import { Store } from 'redux';
+import { ApplicationState } from './store';
+import Routes from './router';
+import theme from './styles/theme';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const StyledWrapper = styled.div`
+  min-height: 100vh;
+  background-color: ${(props) => props.theme.colors.background};
+  align-items: center;
+  display: flex;
+  * {
+    box-sizing: border-box;
+  }
+`;
+
+interface OwnProps {
+  history: History;
+  store: Store<ApplicationState>;
 }
+
+const App = ({ history, store }: OwnProps) => {
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={theme()}>
+        <StyledWrapper>
+          <ConnectedRouter history={history} key={history.location.pathname}>
+            <Routes />
+          </ConnectedRouter>
+        </StyledWrapper>
+      </ThemeProvider>
+    </Provider>
+  );
+};
 
 export default App;

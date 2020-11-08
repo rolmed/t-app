@@ -1,17 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { createBrowserHistory } from 'history';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const loadApp = async () => {
+  const history = createBrowserHistory({ basename: '/' });
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  const storeConfiguration = await import('./store/configureStore');
+  storeConfiguration.default.configureStore(history);
+
+  ReactDOM.render(
+    <React.StrictMode>
+      <App history={history} store={storeConfiguration.default.store} />
+    </React.StrictMode>,
+    document.getElementById('root'),
+  );
+};
+
+loadApp();
