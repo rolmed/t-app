@@ -4,9 +4,11 @@ import { useMemo } from 'react';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
 import loginReducer, { LoginState } from './login';
+import serversReducer, { ServersState } from './servers';
 
 export interface ApplicationState {
   login: LoginState;
+  servers: ServersState;
   router: RouterState;
 }
 
@@ -14,6 +16,7 @@ export const createRootReducer = (history: History) =>
   combineReducers<ApplicationState>({
     router: connectRouter(history),
     login: loginReducer,
+    servers: serversReducer,
   });
 
 // eslint-disable-next-line @typescript-eslint/ban-types
